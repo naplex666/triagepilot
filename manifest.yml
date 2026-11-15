@@ -1,0 +1,106 @@
+modules:
+  rovo:agent:
+    - key: triage-pilot
+      name: TriagePilot
+      description: Triages Jira work items — suggests priority, type and labels, finds duplicates, and drafts a first reply for the reporter.
+      prompt: resource:agent-prompt;prompt.md
+      conversationStarters:
+        - Triage this work item
+        - Are there duplicates of this issue?
+        - Draft a first reply to the reporter
+        - Who is involved in this work item?
+      actions:
+        - triage-issue
+        - find-duplicates
+        - draft-reply
+        - work-item-people
+  action:
+    - key: triage-issue
+      name: Triage this work item
+      function: triageIssue
+      actionVerb: GET
+      description: |
+        Analyses one Jira work item and suggests a priority, type, labels and confidence, with reasons. Use for 'triage this issue' or 'how urgent is X'. Leave issueKey empty for the item on screen.
+      inputs:
+        issueKey:
+          title: Work item key
+          type: string
+          required: false
+          description: The Jira work item key, for example PROJ-12. Leave empty to use the work item open on screen.
+    - key: find-duplicates
+      name: Find duplicate work items
+      function: findDuplicates
+      actionVerb: GET
+      description: |
+        Finds work items that look like duplicates of one item, by searching similar text and ranking overlap. Use for 'are there duplicates?'. Leave issueKey empty for the item on screen.
+      inputs:
+        issueKey:
+          title: Work item key
+          type: string
+          required: false
+          description: The Jira work item key, for example PROJ-12. Leave empty to use the work item open on screen.
+    - key: draft-reply
+      name: Draft a first reply
+      function: draftReply
+      actionVerb: GET
+      description: |
+        Drafts a short first reply to the reporter, from the triage result and duplicates found. Returns text only; nothing is posted. Leave issueKey empty for the item on screen.
+      inputs:
+        issueKey:
+          title: Work item key
+          type: string
+          required: false
+          description: The Jira work item key, for example PROJ-12. Leave empty to use the work item open on screen.
+    - key: work-item-people
+      name: People around a work item
+      function: workItemPeople
+      actionVerb: GET
+      description: |
+        For one work item, lists the assignee, reporter, recent commenters, the assignee's teams and linked goals. Use for 'who is involved in X?'. Leave issueKey empty for the item on screen.
+      inputs:
+        issueKey:
+          title: Work item key
+          type: string
+          required: false
+          description: The Jira work item key, for example PROJ-12. Leave empty to use the work item open on screen.
+  jira:issuePanel:
+    - key: triage-panel
+      resource: main
+      resolver:
+        function: resolver
+      render: native
+      title: TriagePilot
+      icon: https://developer.atlassian.com/platform/forge/images/icons/issue-panel-icon.svg
+  function:
+    - key: triageIssue
+      handler: index.triageIssue
+    - key: findDuplicates
+      handler: index.findDuplicates
+    - key: draftReply
+      handler: index.draftReply
+    - key: workItemPeople
+      handler: index.workItemPeople
+    - key: resolver
+      handler: index.handler
+resources:
+  - key: agent-prompt
+    path: prompts
+  - key: main
+    path: src/frontend/index.jsx
+permissions:
+  scopes:
+    - read:jira-user
+    - read:jira-work
+    - write:jira-work
+    - read:graph:issue:jira
+    - read:graph:issue-status:jira
+    - read:graph:issue-comment:jira
+    - read:graph:user:atlassian
+    - read:graph:team:atlassian
+    - read:graph:goal:atlassian
+app:
+  runtime:
+    name: nodejs22.x
+  # PLACEHOLDER — replaced by `forge create` / `forge register` once logged in
+  # with an Atlassian account. Do not submit with this id.
+  id: ari:cloud:ecosystem::app/11111111-2222-4333-8444-555555555555

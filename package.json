@@ -1,0 +1,20 @@
+{
+  "dependencies": {
+    "@forge/api": "8.4.0",
+    "@forge/bridge": "7.3.0",
+    "@forge/react": "12.5.0",
+    "@forge/resolver": "2.0.2"
+  },
+  "description": "TriagePilot — Rovo triage agent for Jira. Triages new issues, finds duplicates, drafts first replies. Built for Codegeist 2026.",
+  "name": "triagepilot",
+  "private": true,
+  "scripts": {
+    "lint": "forge lint",
+    "test": "node --test tests/triage.test.js"
+  },
+  "type": "module",
+  "version": "0.1.0",
+  "devDependencies": {
+    "esbuild": "^0.28.2"
+  }
+}
