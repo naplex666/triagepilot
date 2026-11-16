@@ -6,6 +6,7 @@ import ForgeReconciler, {
   Stack,
   Box,
   Lozenge,
+  Strong,
   useProductContext,
 } from "@forge/react";
 import { invoke } from "@forge/bridge";
@@ -68,7 +69,7 @@ function App() {
     <Stack space="space.200">
       <Box>
         <Text>
-          <strong>{workItem.key}</strong> — {workItem.summary}
+          <Strong>{workItem.key}</Strong> — {workItem.summary}
         </Text>
         <Text>
           Current: {workItem.type || "?"} · {workItem.priority || "no priority"} · {workItem.status || "?"}
@@ -89,7 +90,7 @@ function App() {
 
       <Box>
         <Text>
-          <strong>Possible duplicates ({duplicates.length})</strong>
+          <Strong>Possible duplicates ({duplicates.length})</Strong>
         </Text>
         {duplicates.length === 0 ? (
           <Text>No similar work items found.</Text>
@@ -105,7 +106,7 @@ function App() {
       {people && !people.error && (
         <Box>
           <Text>
-            <strong>People</strong>
+            <Strong>People</Strong>
           </Text>
           <Text>Assignee: {people.assignee ? `${people.assignee.name} (${people.assignee.teams.join(", ") || "no team"})` : "unassigned"}</Text>
           <Text>Reporter: {people.reporter || "unknown"}</Text>
@@ -119,7 +120,7 @@ function App() {
 
       <Box>
         <Text>
-          <strong>Draft first reply</strong>
+          <Strong>Draft first reply</Strong>
         </Text>
         <Text>{draft}</Text>
       </Box>
