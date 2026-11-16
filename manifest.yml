@@ -2,7 +2,8 @@ modules:
   rovo:agent:
     - key: triage-pilot
       name: TriagePilot
-      description: Triages Jira work items — suggests priority, type and labels, finds duplicates, and drafts a first reply for the reporter.
+      description: Triages Jira work items — suggests priority, type and labels, finds
+        duplicates, and drafts a first reply for the reporter.
       prompt: resource:agent-prompt;prompt.md
       conversationStarters:
         - Triage this work item
@@ -26,7 +27,8 @@ modules:
           title: Work item key
           type: string
           required: false
-          description: The Jira work item key, for example PROJ-12. Leave empty to use the work item open on screen.
+          description: The Jira work item key, for example PROJ-12. Leave empty to use the
+            work item open on screen.
     - key: find-duplicates
       name: Find duplicate work items
       function: findDuplicates
@@ -38,7 +40,8 @@ modules:
           title: Work item key
           type: string
           required: false
-          description: The Jira work item key, for example PROJ-12. Leave empty to use the work item open on screen.
+          description: The Jira work item key, for example PROJ-12. Leave empty to use the
+            work item open on screen.
     - key: draft-reply
       name: Draft a first reply
       function: draftReply
@@ -50,7 +53,8 @@ modules:
           title: Work item key
           type: string
           required: false
-          description: The Jira work item key, for example PROJ-12. Leave empty to use the work item open on screen.
+          description: The Jira work item key, for example PROJ-12. Leave empty to use the
+            work item open on screen.
     - key: work-item-people
       name: People around a work item
       function: workItemPeople
@@ -62,7 +66,8 @@ modules:
           title: Work item key
           type: string
           required: false
-          description: The Jira work item key, for example PROJ-12. Leave empty to use the work item open on screen.
+          description: The Jira work item key, for example PROJ-12. Leave empty to use the
+            work item open on screen.
   jira:issuePanel:
     - key: triage-panel
       resource: main
@@ -101,6 +106,4 @@ permissions:
 app:
   runtime:
     name: nodejs22.x
-  # PLACEHOLDER — replaced by `forge create` / `forge register` once logged in
-  # with an Atlassian account. Do not submit with this id.
-  id: ari:cloud:ecosystem::app/11111111-2222-4333-8444-555555555555
+  id: ari:cloud:ecosystem::app/70a61209-19b7-4420-9722-9d037a035b80

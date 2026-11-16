@@ -4,7 +4,7 @@
 // returns data for Rovo to write into prose. All writes happen from the
 // issue panel, where the user clicks a button and the resolver calls Jira.
 import api, { route } from "@forge/api";
-import Resolver from "@forge/resolver";
+import { makeResolver } from "@forge/resolver";
 import { triageIssue as runTriage, rankDuplicates, draftReply as buildDraft } from "./triage.js";
 import { twgAll, Q, workItemAri } from "./twg.js";
 
@@ -174,9 +174,8 @@ async function priorityIdFor(name) {
   return PRIORITY_FALLBACK[name] || null;
 }
 
-const resolver = new Resolver();
-
-resolver.define("getTriage", async (req) => {
+export const handler = makeResolver({
+  getTriage: async (req) => {
   const key = String(req.payload?.issueKey || "").trim().toUpperCase();
   if (!key) return { ok: false, error: "No work item key." };
   const { issue, error } = await readIssue(key);
@@ -200,9 +199,8 @@ resolver.define("getTriage", async (req) => {
     people: people.error ? { error: people.error } : people,
     notes: searchError ? [searchError] : [],
   };
-});
-
-resolver.define("applyTriage", async (req) => {
+  },
+  applyTriage: async (req) => {
   const { issueKey, priority, labels } = req.payload || {};
   const key = String(issueKey || "").trim().toUpperCase();
   if (!key) return { ok: false, error: "No work item key." };
@@ -221,9 +219,8 @@ resolver.define("applyTriage", async (req) => {
   });
   if (res.status !== 204 && !res.ok) return { ok: false, error: `Applying triage failed (${res.status}).` };
   return { ok: true, applied: fields };
-});
-
-resolver.define("postComment", async (req) => {
+  },
+  postComment: async (req) => {
   const { issueKey, text } = req.payload || {};
   const key = String(issueKey || "").trim().toUpperCase();
   if (!key || !text) return { ok: false, error: "Need a work item key and comment text." };
@@ -239,6 +236,5 @@ resolver.define("postComment", async (req) => {
   });
   if (!res.ok) return { ok: false, error: `Posting the comment failed (${res.status}).` };
   return { ok: true };
+  },
 });
-
-export const handler = resolver.getDefinitions();
